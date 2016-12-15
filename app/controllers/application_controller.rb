@@ -27,7 +27,7 @@ class ApplicationController < Sinatra::Base
       session[:user_id] = user.id
       redirect "/teams"
     else
-      redirect "/signup_failure"
+      erb :'users/signup_failure'
     end
   end
 
@@ -45,7 +45,7 @@ class ApplicationController < Sinatra::Base
       session[:user_id] = user.id
       redirect "/teams"
     else
-      redirect "/login_failure"
+      erb :'users/login_failure'
     end
   end
 
