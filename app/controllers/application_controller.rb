@@ -15,7 +15,7 @@ class ApplicationController < Sinatra::Base
 
   get '/signup' do
     if logged_in?
-      redirect "/tweets"
+      redirect "/teams"
     else
       erb :'users/create_user'
     end
@@ -25,7 +25,7 @@ class ApplicationController < Sinatra::Base
     user = User.new(username: params[:username], email: params[:email], password: params[:password])
     if user.save
       session[:user_id] = user.id
-      redirect "/tweets"
+      redirect "/teams"
     else
       redirect "/signup_failure"
     end
@@ -33,7 +33,7 @@ class ApplicationController < Sinatra::Base
 
   get '/login' do
     if logged_in?
-      redirect "/tweets"
+      redirect "/teams"
     else
       erb :'users/login'
     end
@@ -43,82 +43,78 @@ class ApplicationController < Sinatra::Base
     user = User.find_by(username: params[:username])
     if user && user.authenticate(params[:password])
       session[:user_id] = user.id
-      redirect "/tweets"
+      redirect "/teams"
     else
       redirect "/login_failure"
     end
   end
 
-  get '/tweets' do
-    @tweets = Tweet.all
+  get '/teams' do
+    @teams = Team.all
     if logged_in?
-      erb :'tweets/tweets'
+      erb :'teams/teams'
     else
       redirect "/login"
     end
   end
 
-  get '/tweets/new' do
+  get '/teams/new' do
     if logged_in?
-      erb :'tweets/create_tweet'
+      erb :'teams/create_team'
     else
       redirect "/login"
     end
   end
 
-  post '/tweets' do
+  post '/teams' do
+    @team = Team.new(qb: params[:qb], rb: params[:rb], wr: params[:wr], te: params[:te], defense: params[:defense], kicker: params[:kicker], user_id: current_user.id)
+    @team.save
+  end
+
+  get '/teams/:id' do
+    if logged_in?
+      @team = Tweet.find_by(params[:id])
+      erb :'teams/show_team'
+    else
+      redirect "/login"
+    end
+  end
+
+  get '/teams/:id/edit' do
+    if logged_in?
+      @team = Tweet.find_by(params[:id])
+      erb :'teams/edit_tweet'
+    else
+      redirect "/login"
+    end
+  end
+
+  patch '/teams/:id' do
+    @team = Tweet.find_by(params[:id])
     if params[:content] != ""
-      @tweet = Tweet.new(content: params[:content], user_id: current_user.id)
-      @tweet.save
+      @team.content = params[:content]
+      @team.save
+      redirect to "/teams/#{@team.id}"
     else
-      redirect "/tweets/new"
+      redirect to "/teams/#{@team.id}/edit"
     end
   end
 
-  get '/tweets/:id' do
-    if logged_in?
-      @tweet = Tweet.find_by(params[:id])
-      erb :'tweets/show_tweet'
-    else
-      redirect "/login"
-    end
+  delete '/teams/:id/delete' do
+    @team = Tweet.find_by(params[:id])
+    @team.delete
+    redirect to '/teams'
   end
 
-  get '/tweets/:id/edit' do
-    if logged_in?
-      @tweet = Tweet.find_by(params[:id])
-      erb :'tweets/edit_tweet'
-    else
-      redirect "/login"
-    end
-  end
-
-  patch '/tweets/:id' do
-    @tweet = Tweet.find_by(params[:id])
-    if params[:content] != ""
-      @tweet.content = params[:content]
-      @tweet.save
-      redirect to "/tweets/#{@tweet.id}"
-    else
-      redirect to "/tweets/#{@tweet.id}/edit"
-    end
-  end
-
-  delete '/tweets/:id/delete' do
-    @tweet = Tweet.find_by(params[:id])
-    @tweet.delete
-    redirect to '/tweets'
-  end
-
-  post '/tweets/:id' do
-    @tweet = Tweet.find_by(params[:username])
-    @tweet.save
-    redirect to "tweets/#{@tweet.id}"
+  post '/teams/:id' do
+    @team = Tweet.find_by(params[:username])
+    @team.save
+    redirect to "teams/#{@team.id}"
   end
 
   get '/users/:slug' do
     @user = User.find_by_slug(params[:slug])
-    erb :'tweets/single_user_tweets'
+    erb :'teams/single_user_teams'
   end
 
   get "/logout" do
