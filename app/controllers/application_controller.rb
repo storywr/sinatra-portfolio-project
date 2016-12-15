@@ -73,7 +73,7 @@ class ApplicationController < Sinatra::Base
 
   get '/teams/:id' do
     if logged_in?
-      @team = Tweet.find_by(params[:id])
+      @team = Team.find_by(params[:id])
       erb :'teams/show_team'
     else
       redirect "/login"
@@ -82,8 +82,8 @@ class ApplicationController < Sinatra::Base
 
   get '/teams/:id/edit' do
     if logged_in?
-      @team = Tweet.find_by(params[:id])
-      erb :'teams/edit_tweet'
+      @team = Team.find_by(params[:id])
+      erb :'teams/edit_team'
     else
       redirect "/login"
     end
@@ -91,23 +91,19 @@ class ApplicationController < Sinatra::Base
 
   patch '/teams/:id' do
     @team = Tweet.find_by(params[:id])
-    if params[:content] != ""
-      @team.content = params[:content]
-      @team.save
-      redirect to "/teams/#{@team.id}"
-    else
-      redirect to "/teams/#{@team.id}/edit"
-    end
+    @team.content = params[:content]
+    @team.save
+    redirect to "/teams/#{@team.id}"
   end
 
   delete '/teams/:id/delete' do
-    @team = Tweet.find_by(params[:id])
+    @team = Team.find_by(params[:id])
     @team.delete
     redirect to '/teams'
   end
 
   post '/teams/:id' do
-    @team = Tweet.find_by(params[:username])
+    @team = Team.find_by(params[:username])
     @team.save
     redirect to "teams/#{@team.id}"
   end
