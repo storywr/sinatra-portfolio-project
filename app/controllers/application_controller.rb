@@ -90,8 +90,8 @@ class ApplicationController < Sinatra::Base
   end
 
   patch '/teams/:id' do
-    @team = Tweet.find_by(params[:id])
-    @team.content = params[:content]
+    @team = Team.find_by(params[:id])
+    @team = Team.new(qb: params[:qb], rb: params[:rb], wr: params[:wr], te: params[:te], defense: params[:defense], kicker: params[:kicker])
     @team.save
     redirect to "/teams/#{@team.id}"
   end
