@@ -1,12 +1,13 @@
-<h1>Welcome, <%= @user.username %></h1>
+<h1><%= @user.username %>'s Teams</h1>
 <ul>
   <%@user.teams.each do |team|%>
-  <li><%=team.qb%></li>
-  <li><%=team.rb%></li>
-  <li><%=team.wr%></li>
-  <li><%=team.te%></li>
-  <li><%=team.defense%></li>
-  <li><%=team.kicker%></li>
-  <a href="/team/<%= team.id %>"></a>
+  <h2>Team: <%=team.name%></h2>
+  <li>Quarterback: <%=team.qb%></li>
+  <li>Running Back: <%=team.rb%></li>
+  <li>Wide Receiver: <%=team.wr%></li>
+  <li>Tight End: <%=team.te%></li>
+  <li>Defense: <%=team.defense%></li>
+  <li>Kicker: <%=team.kicker%></li>
+  <a href="/teams/<%= team.id %>">View Team</a>
   <%end%>
 </ul>

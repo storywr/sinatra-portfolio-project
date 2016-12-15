@@ -1,30 +1,21 @@
-<p><%= @team.qb %></p>
-<p><%= @team.rb %></p>
-<p><%= @team.wr %></p>
-<p><%= @team.te %></p>
-<p><%= @team.defense %></p>
-<p><%= @team.kicker %></p>
+<a href="/teams">Teams in Your League</a><br></br>
 
-<h2>Edit Team</h2>
-<form action="/teams/<%=@team.id%>" method="post">
-  <input id="hidden" type="hidden" name="_method" value="patch">
-  <input type="text" name="qb" value="qb">
-  <input type="text" name="rb" value="rb">
-  <input type="text" name="wr" value="wr">
-  <input type="text" name="te" value="te">
-  <input type="text" name="defense" value="defense">
-  <input type="text" name="kicker" value="kicker">
-  <input type="submit" value="submit">
-</form>
+<h1><%= @team.name %></h1>
+<h3>Owner: <%=@team.user.username%></h3>
+<p>Quarterback: <%= @team.qb %></p>
+<p>Running Back: <%= @team.rb %></p>
+<p>Wide Receiver: <%= @team.wr %></p>
+<p>Tight End: <%= @team.te %></p>
+<p>Defense: <%= @team.defense %></p>
+<p>Kicker: <%= @team.kicker %></p>
+<br></br>
 
-<h2>Delete Team</h2>
+<h3>Edit Team</h3>
+<a href="/teams/<%=@team.id%>/edit">Edit Team</a>
+<br></br>
+
+<h3>Delete Team</h3>
 <form action="/teams/<%=@team.id%>/delete" method="post">
   <input id="hidden" type="hidden" name="_method" value="delete">
-  <input type="text" name="qb" value="qb">
-  <input type="text" name="rb" value="rb">
-  <input type="text" name="wr" value="wr">
-  <input type="text" name="te" value="te">
-  <input type="text" name="defense" value="defense">
-  <input type="text" name="kicker" value="kicker">
   <input type="submit" value="Delete Team">
 </form>

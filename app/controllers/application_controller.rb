@@ -13,6 +13,10 @@ class ApplicationController < Sinatra::Base
     erb :index
   end
 
+  get '/homepage' do
+    erb :homepage
+  end
+
   get '/signup' do
     if logged_in?
       redirect "/teams"
@@ -25,7 +29,7 @@ class ApplicationController < Sinatra::Base
     user = User.new(username: params[:username], email: params[:email], password: params[:password])
     if user.save
       session[:user_id] = user.id
-      redirect "/teams"
+      redirect "/homepage"
     else
       erb :'users/signup_failure'
     end
@@ -33,7 +37,7 @@ class ApplicationController < Sinatra::Base
 
   get '/login' do
     if logged_in?
-      redirect "/teams"
+      erb :homepage
     else
       erb :'users/login'
     end
@@ -43,10 +47,15 @@ class ApplicationController < Sinatra::Base
     user = User.find_by(username: params[:username])
     if user && user.authenticate(params[:password])
       session[:user_id] = user.id
-      redirect "/teams"
+      redirect "/homepage"
     else
       erb :'users/login_failure'
     end
+  end
+
+  get '/users' do
+    @users = User.all
+    erb :'users/user_index'
   end
 
   get '/teams' do
@@ -67,8 +76,10 @@ class ApplicationController < Sinatra::Base
   end
 
   post '/teams' do
-    @team = Team.new(qb: params[:qb], rb: params[:rb], wr: params[:wr], te: params[:te], defense: params[:defense], kicker: params[:kicker], user_id: current_user.id)
+    @team = Team.new(name: params[:name], qb: params[:qb], rb: params[:rb], wr: params[:wr], te: params[:te], defense: params[:defense], kicker: params[:kicker], user_id: current_user.id)
+    @team.user = current_user
     @team.save
+    redirect "/teams"
   end
 
   get '/teams/:id' do
@@ -91,15 +102,29 @@ class ApplicationController < Sinatra::Base
 
   patch '/teams/:id' do
     @team = Team.find_by(params[:id])
-    @team = Team.new(qb: params[:qb], rb: params[:rb], wr: params[:wr], te: params[:te], defense: params[:defense], kicker: params[:kicker])
-    @team.save
-    redirect to "/teams/#{@team.id}"
+    if current_user == @team.user
+      @team.name = params[:name]
+      @team.qb = params[:qb]
+      @team.rb = params[:rb]
+      @team.wr = params[:wr]
+      @team.te = params[:te]
+      @team.defense = params[:defense]
+      @team.kicker = params[:kicker]
+      @team.save
+      redirect to "/teams/#{@team.id}"
+    else
+      erb :not_your_team
+    end
   end
 
   delete '/teams/:id/delete' do
     @team = Team.find_by(params[:id])
-    @team.delete
-    redirect to '/teams'
+    if current_user == @team.user
+      @team.delete
+      redirect to '/teams'
+    else
+      erb :not_your_team
+    end
   end
 
   post '/teams/:id' do

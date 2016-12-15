@@ -1,12 +1,17 @@
-<h1>Welcome, <%= current_user.username %></h1>
+<a href="/homepage">Homepage</a>
+<br></br>
+<a href="/logout">Logout</a>
+
 <ul>
   <%@teams.each do |team|%>
-  <li><%=team.qb%></li>
-  <li><%=team.rb%></li>
-  <li><%=team.wr%></li>
-  <li><%=team.te%></li>
-  <li><%=team.defense%></li>
-  <li><%=team.kicker%></li>
-  <a href="/team/<%= team.id %>"></a>
+  <h2>Team: <%=team.name%></h2>
+  <h3>Owner: <%=team.user.username%></h3>
+  <li>Quarterback: <%=team.qb%></li>
+  <li>Running Back: <%=team.rb%></li>
+  <li>Wide Receiver: <%=team.wr%></li>
+  <li>Tight End: <%=team.te%></li>
+  <li>Defense: <%=team.defense%></li>
+  <li>Kicker: <%=team.kicker%></li>
+  <a href="/teams/<%= team.id %>">View Team</a>
   <%end%>
 </ul>

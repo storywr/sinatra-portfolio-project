@@ -13,6 +13,7 @@
 ActiveRecord::Schema.define(version: 20161215073906) do
 
   create_table "teams", force: :cascade do |t|
+    t.string  "name"
     t.string  "qb"
     t.string  "rb"
     t.string  "wr"
