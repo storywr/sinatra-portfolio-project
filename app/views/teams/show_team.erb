@@ -1,0 +1,17 @@
+<p>
+  <%= @team.content %>
+</p>
+
+<h2>Edit Team</h2>
+<form action="/teams/<%=@team.id%>" method="post">
+  <input id="hidden" type="hidden" name="_method" value="patch">
+  <input type="text" name="content">
+  <input type="submit" value="submit">
+</form>
+
+<h2>Delete Team</h2>
+<form action="/teams/<%=@team.id%>/delete" method="post">
+  <input id="hidden" type="hidden" name="_method" value="delete">
+  <input type="text" name="content">
+  <input type="submit" value="Delete Tweet">
+</form>

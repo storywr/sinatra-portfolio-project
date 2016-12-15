@@ -1,0 +1,8 @@
+<h1>Welcome, <%= current_user.username %></h1>
+<ul>
+  <%@teams.each do |team|%>
+  <li><%=team.user%></li>
+  <li><%=team.roster%></li>
+  <a href="/team/<%= team.id %>"></a>
+  <%end%>
+</ul>
