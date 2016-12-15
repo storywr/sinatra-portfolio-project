@@ -84,7 +84,7 @@ class ApplicationController < Sinatra::Base
 
   get '/teams/:id' do
     if logged_in?
-      @team = Team.find_by(params[:id])
+      @team = Team.find_by(id: params[:id])
       erb :'teams/show_team'
     else
       redirect "/login"
@@ -93,7 +93,7 @@ class ApplicationController < Sinatra::Base
 
   get '/teams/:id/edit' do
     if logged_in?
-      @team = Team.find_by(params[:id])
+      @team = Team.find_by(id: params[:id])
       erb :'teams/edit_team'
     else
       redirect "/login"
@@ -101,7 +101,7 @@ class ApplicationController < Sinatra::Base
   end
 
   patch '/teams/:id' do
-    @team = Team.find_by(params[:id])
+    @team = Team.find_by(id: params[:id])
     if current_user == @team.user
       @team.name = params[:name]
       @team.qb = params[:qb]
@@ -118,7 +118,7 @@ class ApplicationController < Sinatra::Base
   end
 
   delete '/teams/:id/delete' do
-    @team = Team.find_by(params[:id])
+    @team = Team.find_by(id: params[:id])
     if current_user == @team.user
       @team.delete
       redirect to '/teams'
